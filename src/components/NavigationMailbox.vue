@@ -579,12 +579,14 @@ export default {
 							.dispatch('deleteMailbox', { mailbox: this.mailbox })
 							.then(() => {
 								logger.info(`mailbox ${id} deleted`)
-								this.$router.push({
-									name: 'mailbox',
-									params: {
-										mailboxId: PRIORITY_INBOX_ID,
-									},
-								})
+								if (this.$route.params.mailboxId) {
+									this.$router.push({
+										name: 'mailbox',
+										params: {
+											mailboxId: PRIORITY_INBOX_ID,
+										},
+									})
+								}
 							})
 							.catch((error) => logger.error('could not delete mailbox', { error }))
 					}
