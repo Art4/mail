@@ -229,7 +229,7 @@ import EraserVariant from 'vue-material-design-icons/EraserVariant'
 import ImportantIcon from './icons/ImportantIcon'
 import IconSend from 'vue-material-design-icons/Send'
 import MoveMailboxModal from './MoveMailboxModal'
-import { UNIFIED_INBOX_ID } from '../store/constants'
+import { PRIORITY_INBOX_ID, UNIFIED_INBOX_ID } from '../store/constants'
 
 import { clearCache } from '../service/MessageService'
 import { getMailboxStatus } from '../service/MailboxService'
@@ -579,6 +579,12 @@ export default {
 							.dispatch('deleteMailbox', { mailbox: this.mailbox })
 							.then(() => {
 								logger.info(`mailbox ${id} deleted`)
+								this.$router.push({
+									name: 'mailbox',
+									params: {
+										mailboxId: PRIORITY_INBOX_ID,
+									},
+								})
 							})
 							.catch((error) => logger.error('could not delete mailbox', { error }))
 					}
