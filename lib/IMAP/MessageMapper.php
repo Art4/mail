@@ -724,7 +724,7 @@ class MessageMapper {
 			]);
 			/** @var Horde_Imap_Client_Data_Fetch $part */
 			$part = $parts[$fetchData->getUid()];
-			$htmlBody = $part->getBodyPart($htmlBodyId);
+			$htmlBody = ($htmlBodyId !== null) ? $part->getBodyPart($htmlBodyId) : null;
 			if (!empty($htmlBody)) {
 				$html = new Html2Text($htmlBody);
 				return new MessageStructureData($hasAttachments, trim($html->getText()), $isImipMessage);
