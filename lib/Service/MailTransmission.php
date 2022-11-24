@@ -283,17 +283,17 @@ class MailTransmission implements IMailTransmission {
 
 		$perfLogger = $this->performanceLogger->start('save local draft');
 
-		$account = $message->getAccount();
+		$account = $messageData->getAccount();
 		$imapMessage = $account->newMessage();
-		$imapMessage->setTo($message->getTo());
-		$imapMessage->setSubject($message->getSubject());
+		$imapMessage->setTo($messageData->getTo());
+		$imapMessage->setSubject($messageData->getSubject());
 		$from = new AddressList([
 			Address::fromRaw($account->getName(), $account->getEMailAddress()),
 		]);
 		$imapMessage->setFrom($from);
-		$imapMessage->setCC($message->getCc());
-		$imapMessage->setBcc($message->getBcc());
-		$imapMessage->setContent($message->getBody());
+		$imapMessage->setCC($messageData->getCc());
+		$imapMessage->setBcc($messageData->getBcc());
+		$imapMessage->setContent($messageData->getBody());
 
 		// build mime body
 		$headers = [
