@@ -342,10 +342,7 @@ class MailTransmission implements IMailTransmission {
 			$client->logout();
 		}
 
-		$this->eventDispatcher->dispatch(
-			DraftSavedEvent::class,
-			new DraftSavedEvent($account, $messageData, null)
-		);
+		$this->eventDispatcher->dispatchTyped(new DraftSavedEvent($account, $messageData, null));
 		$perfLogger->step('emit post local draft save event');
 
 		$perfLogger->end();
