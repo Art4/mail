@@ -386,6 +386,40 @@ class MailTransmissionTest extends TestCase {
 		$this->transmission->sendMessage($messageData, $messageInReply->getMessageId());
 	}
 
+	public function testSaveLocalDraft() {
+		$mailAccount = new MailAccount();
+		$mailAccount->setUserId('testuser');
+		$mailAccount->setDraftsMailboxId(123);
+		/** @var Account|MockObject $account */
+		$account = $this->createMock(Account::class);
+		$account->method('getMailAccount')->willReturn($mailAccount);
+		$account->method('getName')->willReturn('Test User');
+		$account->method('getEMailAddress')->willReturn('test@user');
+		$messageData = NewMessageData::fromRequest($account, 'to@d.com', '', '', 'sub', 'bod');
+		$message = new Message();
+		$account->expects($this->once())
+			->method('newMessage')
+			->willReturn($message);
+		$client = $this->createMock(Horde_Imap_Client_Socket::class);
+		$this->imapClientFactory->expects($this->once())
+			->method('getClient')
+			->with($account)
+			->willReturn($client);
+		$draftsMailbox = new DbMailbox();
+		$this->mailboxMapper->expects($this->once())
+			->method('findById')
+			->with(123)
+			->willReturn($draftsMailbox);
+		$this->messageMapper->expects($this->once())
+			->method('save')
+			->with($client, $draftsMailbox, $this->anything());
+		$this->eventDispatcher->expects(self::once())
+			->method('dispatchTyped')
+			->with(new DraftSavedEvent($account, $messageData, null));
+
+		$this->transmission->saveDraft($messageData);
+	}
+
 	public function testSaveDraft() {
 		$mailAccount = new MailAccount();
 		$mailAccount->setUserId('testuser');
@@ -559,7 +593,7 @@ class MailTransmissionTest extends TestCase {
 		$replyMessage = new DbMessage();
 		$replyMessage->setMessageId('abc');
 
-		$this->transmission->sendLocalMessage(new Account($mailAccount), $message, true);
+		$this->transmission->saveLocalDraft(new Account($mailAccount), $message);
 	}
 
 	public function testSendLocalDraftNoDraftsMailbox(): void {
@@ -600,6 +634,6 @@ class MailTransmissionTest extends TestCase {
 		$replyMessage->setMessageId('abc');
 
 		$this->expectException(ClientException::class);
-		$this->transmission->sendLocalMessage(new Account($mailAccount), $message, true);
+		$this->transmission->sendLocalMessage(new Account($mailAccount), $message);
 	}
 }
