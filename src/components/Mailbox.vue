@@ -129,7 +129,7 @@ export default {
 		},
 		envelopesToShow() {
 			if (this.paginate === 'manual' && !this.expanded) {
-				return this.envelopes.slice(0, 6)
+				return this.envelopes.slice(0, this.initialPageSize)
 			}
 			return this.envelopes
 		},
