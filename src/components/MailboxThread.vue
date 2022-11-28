@@ -47,7 +47,7 @@
 						:search-query="appendToSearch(priorityImportantQuery)"
 						:paginate="'manual'"
 						:is-priority-inbox="true"
-						:initial-page-size="8"
+						:initial-page-size="6"
 						:collapsible="true"
 						:bus="bus" />
 					<SectionTitle v-show="hasImportantEnvelopes"
@@ -309,6 +309,7 @@ export default {
 .envelope-list {
 	overflow-y: auto;
 	padding: 0 4px;
+	top: -10px;
 }
 .information-icon {
 	opacity: .7;
