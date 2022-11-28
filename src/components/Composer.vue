@@ -199,7 +199,7 @@
 		<ComposerAttachments v-model="attachments"
 			:bus="bus"
 			:upload-size-limit="attachmentSizeLimit"
-			@upload="$emit('upload-attachment')" />
+			@upload="$emit('upload-attachment', $event, getMessageData())" />
 		<div class="composer-actions-right composer-actions">
 			<div class="composer-actions--primary-actions">
 				<p class="composer-actions-draft-status">

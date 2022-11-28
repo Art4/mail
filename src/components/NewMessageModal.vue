@@ -175,10 +175,10 @@ export default {
 				bcc: serializeRecipients ? data.bcc.map(this.recipientToRfc822).join(', ') : data.bcc,
 			}
 		},
-		onAttachmentUploading(done) {
+		onAttachmentUploading(done, data) {
 			this.attachmentsPromise = this.attachmentsPromise
 				.then(done)
-				.then(this.onDraft)
+				.then(() => this.onDraft(data))
 				.then(() => logger.debug('attachments uploaded'))
 				.catch((error) => logger.error('could not upload attachments', { error }))
 		},
