@@ -37,7 +37,6 @@ use OCA\Mail\Db\Mailbox as DbMailbox;
 use OCA\Mail\Db\MailboxMapper;
 use OCA\Mail\Db\Message as DbMessage;
 use OCA\Mail\Db\Recipient;
-use OCA\Mail\Events\DraftSavedEvent;
 use OCA\Mail\Events\MessageSentEvent;
 use OCA\Mail\Exception\ClientException;
 use OCA\Mail\IMAP\IMAPClientFactory;
