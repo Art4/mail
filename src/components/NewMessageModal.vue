@@ -113,6 +113,7 @@ export default {
 				aliasId: data.aliasId,
 				inReplyToMessageId: data.inReplyToMessageId,
 				sendAt: data.sendAt,
+				draftId : data.draftId,
 			}
 		},
 		async sendMessage(data) {
