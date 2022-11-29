@@ -463,7 +463,7 @@ export default {
 			commit('hideMessageComposer')
 		})
 	},
-	async fetchEnvelope({ commit, getters }, id) {
+	async fetchEnvelope({ commit, getters }, { accountId, id }) {
 		return handleHttpAuthErrors(commit, async () => {
 			const cached = getters.getEnvelope(id)
 			if (cached) {
@@ -471,7 +471,7 @@ export default {
 				return cached
 			}
 
-			const envelope = await fetchEnvelope(id)
+			const envelope = await fetchEnvelope(accountId, id)
 			// Only commit if not undefined (not found)
 			if (envelope) {
 				commit('addEnvelope', {

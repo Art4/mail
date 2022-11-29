@@ -94,7 +94,10 @@ export default {
 				this.$store.commit('removeMessage', { id: data.draftId })
 
 				// Fetch new draft envelope
-				await this.$store.dispatch('fetchEnvelope', id)
+				await this.$store.dispatch('fetchEnvelope', {
+					accountId: data.account,
+					id,
+				})
 
 				return id
 			}
