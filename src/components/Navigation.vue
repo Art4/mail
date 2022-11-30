@@ -30,7 +30,7 @@
 				:key="'mailbox-' + mailbox.databaseId"
 				:account="unifiedAccount"
 				:mailbox="mailbox" />
-			<NavigationOutbox />
+			<NavigationOutbox v-if="messages.length !== 0" />
 			<AppNavigationSpacer />
 
 			<!-- All other mailboxes grouped by their account -->
@@ -143,6 +143,9 @@ export default {
 		 */
 		passwordIsUnavailable() {
 			return this.$store.getters.getPreference('password-is-unavailable', false)
+		},
+		messages() {
+			return this.$store.getters['outbox/getAllMessages']
 		},
 	},
 	methods: {
