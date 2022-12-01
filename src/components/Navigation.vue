@@ -30,7 +30,6 @@
 				:key="'mailbox-' + mailbox.databaseId"
 				:account="unifiedAccount"
 				:mailbox="mailbox" />
-			<NavigationOutbox v-if="messages.length !== 0" />
 			<AppNavigationSpacer />
 
 			<!-- All other mailboxes grouped by their account -->
@@ -70,6 +69,8 @@
 			</template>
 		</template>
 		<template #footer>
+			<div class="outbox-border" />
+			<NavigationOutbox v-if="messages.length !== 0" class="outbox" />
 			<AppNavigationSettings :title="t('mail', 'Mail settings')">
 				<template #icon>
 					<IconSetting :size="20" />
@@ -226,5 +227,25 @@ to {
 :deep(.settings-button) {
 	opacity: .7 !important;
 	font-weight: bold !important;
+	z-index: 1;
+}
+.outbox-border {
+	border-top: 1px solid var(--color-background-darker);
+}
+.outbox {
+	margin-left: 6px;
+	position: relative;
+	z-index: 1;
+	height: 54px;
+}
+:deep(.app-navigation-entry:active),
+:deep(.app-navigation-entry:hover),
+:deep(.app-navigation-entry:focus) {
+		background-color: transparent !important;
+}
+:deep(.app-navigation-entry) {
+	&.active {
+		background-color: transparent !important;
+	}
 }
 </style>
