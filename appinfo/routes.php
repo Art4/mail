@@ -369,6 +369,11 @@ return [
 			'url' => '/integration/google-auth',
 			'verb' => 'GET',
 		],
+		[
+			'name' => 'microsoftIntegration#oauthRedirect',
+			'url' => '/integration/microsoft-auth',
+			'verb' => 'GET',
+		],
 	],
 	'resources' => [
 		'accounts' => ['url' => '/api/accounts'],
