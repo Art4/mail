@@ -69,8 +69,9 @@
 			</template>
 		</template>
 		<template #footer>
-			<div class="outbox-border" />
-			<NavigationOutbox v-if="messages.length !== 0" class="outbox" />
+			<div v-if="messages.length !== 0" class="outbox-border">
+				<NavigationOutbox v-if="messages.length !== 0" class="outbox" />
+			</div>
 			<AppNavigationSettings :title="t('mail', 'Mail settings')">
 				<template #icon>
 					<IconSetting :size="20" />
@@ -233,9 +234,7 @@ to {
 	border-top: 1px solid var(--color-background-darker);
 }
 .outbox {
-	margin-left: 6px;
-	position: relative;
-	z-index: 1;
+	margin-left: 8px;
 	height: 54px;
 }
 :deep(.app-navigation-entry:active),
