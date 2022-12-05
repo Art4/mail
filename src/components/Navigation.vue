@@ -234,13 +234,8 @@ to {
 	border-top: 1px solid var(--color-background-darker);
 }
 .outbox {
-	margin-left: 8px;
-	height: 54px;
-}
-:deep(.app-navigation-entry:active),
-:deep(.app-navigation-entry:hover),
-:deep(.app-navigation-entry:focus) {
-		background-color: transparent !important;
+	margin-left: 6px;
+	width: auto;
 }
 :deep(.app-navigation-entry) {
 	&.active {
