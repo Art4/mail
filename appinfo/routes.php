@@ -370,6 +370,16 @@ return [
 			'verb' => 'GET',
 		],
 		[
+			'name' => 'microsoftIntegration#configure',
+			'url' => '/api/integration/microsoft',
+			'verb' => 'POST',
+		],
+		[
+			'name' => 'microsoftIntegration#unlink',
+			'url' => '/api/integration/google',
+			'verb' => 'DELETE',
+		],
+		[
 			'name' => 'microsoftIntegration#oauthRedirect',
 			'url' => '/integration/microsoft-auth',
 			'verb' => 'GET',

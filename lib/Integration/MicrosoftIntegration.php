@@ -88,6 +88,14 @@ class MicrosoftIntegration {
 		);
 	}
 
+	public function getTenantId(): ?string {
+		$value = $this->config->getAppValue(Application::APP_ID, 'microsoft_oauth_tenant_id');
+		if ($value === '') {
+			return null;
+		}
+		return $value;
+	}
+
 	public function getClientId(): ?string {
 		$value = $this->config->getAppValue(Application::APP_ID, 'microsoft_oauth_client_id');
 		if ($value === '') {
