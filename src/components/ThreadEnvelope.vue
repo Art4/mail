@@ -60,6 +60,9 @@
 				<div class="sender">
 					{{ envelope.from && envelope.from[0] ? envelope.from[0].label : '' }}
 				</div>
+				<div v-if="hasChangedSubject" class="subline">
+					{{ cleanSubject }}
+				</div>
 				<div v-if="showSubline" class="subline">
 					<span class="preview">
 						{{ isEncrypted ? t('mail', 'Encrypted message') : envelope.previewText }}
@@ -236,6 +239,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		threadSubject: {
+			required: true,
+			type: String,
+		},
 	},
 	data() {
 		return {
@@ -287,6 +294,12 @@ export default {
 			return this.$store.getters.getEnvelopeTags(this.envelope.databaseId).filter(
 				(tag) => tag.imapLabel !== '$label1' && !(tag.displayName.toLowerCase() in hiddenTags)
 			)
+		},
+		hasChangedSubject() {
+			return this.cleanSubject !== this.threadSubject
+		},
+		cleanSubject() {
+			return this.envelope.subject.replace(/((?:[\t ]*(?:R|RE|F|FW|FWD):[\t ]*)*)/i, '')
 		},
 		showSubline() {
 			return !this.expanded && !!this.envelope.previewText
