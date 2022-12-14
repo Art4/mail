@@ -579,7 +579,7 @@ export default {
 							.dispatch('deleteMailbox', { mailbox: this.mailbox })
 							.then(() => {
 								logger.info(`mailbox ${id} deleted`)
-								if (this.$route.params.mailboxId === this.mailbox.databaseId) {
+								if (parseInt(this.$route.params.mailboxId, 10) === this.mailbox.databaseId) {
 									this.$router.push({
 										name: 'mailbox',
 										params: {
