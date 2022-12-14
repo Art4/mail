@@ -400,8 +400,12 @@ export default {
 				return true
 			}
 			const parent = this.$store.getters.getParentMailbox(this.mailbox.databaseId)
+			if (!parent || !parent.myAcls) {
+				return this.mailbox.myAcls.indexOf('x') !== -1
+			}
+
 			return this.mailbox.myAcls.indexOf('x') !== -1
-				&& (!parent || parent.myAcls.indexOf('k') !== -1)
+				&& parent.myAcls.indexOf('k') !== -1
 		},
 		hasSeenAcl() {
 			if (!this.mailbox.myAcls) {
