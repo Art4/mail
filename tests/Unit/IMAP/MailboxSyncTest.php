@@ -113,7 +113,7 @@ class MailboxSyncTest extends TestCase {
 			->willReturn($client);
 		$client->expects($this->once())
 			->method('getNamespaces')
-			->willThrowException(new Horde_Imap_Client_Exception());
+			->willThrowException(new Horde_Imap_Client_Exception('', 0));
 		$folders = [
 			$this->createMock(Folder::class),
 			$this->createMock(Folder::class),
@@ -139,14 +139,14 @@ class MailboxSyncTest extends TestCase {
 		$this->sync->sync($account, new NullLogger());
 	}
 
-	public function testSyncStats() {
+	public function testSyncStats(): void {
 		$account = $this->createMock(Account::class);
 		$client = $this->createMock(Horde_Imap_Client_Socket::class);
 		$this->imapClientFactory->expects($this->once())
 			->method('getClient')
 			->with($account)
 			->willReturn($client);
-		$stats = new MailboxStats(42, 10);
+		$stats = new MailboxStats(42, 10, null);
 		$mailbox = new Mailbox();
 		$mailbox->setName('mailbox');
 		$this->folderMapper->expects($this->once())

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "755e1a8e01f1c036335bc20b073a7d07",
+    "content-hash": "96e833492b3730fb2a34d91de7ed3962",
     "packages": [
         {
             "name": "amphp/amp",
@@ -531,16 +531,16 @@
         },
         {
             "name": "bamarni/composer-bin-plugin",
-            "version": "1.8.1",
+            "version": "1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bamarni/composer-bin-plugin.git",
-                "reference": "e12e9769c8ee97d036f7f98abf66b96cf3862346"
+                "reference": "92fd7b1e6e9cdae19b0d57369d8ad31a37b6a880"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/e12e9769c8ee97d036f7f98abf66b96cf3862346",
-                "reference": "e12e9769c8ee97d036f7f98abf66b96cf3862346",
+                "url": "https://api.github.com/repos/bamarni/composer-bin-plugin/zipball/92fd7b1e6e9cdae19b0d57369d8ad31a37b6a880",
+                "reference": "92fd7b1e6e9cdae19b0d57369d8ad31a37b6a880",
                 "shasum": ""
             },
             "require": {
@@ -582,9 +582,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bamarni/composer-bin-plugin/issues",
-                "source": "https://github.com/bamarni/composer-bin-plugin/tree/1.8.1"
+                "source": "https://github.com/bamarni/composer-bin-plugin/tree/1.8.2"
             },
-            "time": "2022-08-03T19:58:11+00:00"
+            "time": "2022-10-31T08:38:03+00:00"
         },
         {
             "name": "bytestream/horde-crypt-blowfish",
@@ -1561,16 +1561,16 @@
         },
         {
             "name": "christophwurst/kitinerary",
-            "version": "0.2.1",
+            "version": "0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/kitinerary.git",
-                "reference": "d2adb02b6d46b36571dc3c5127a8360ba2d5b418"
+                "reference": "5e0f19c16af95821d85f4a8da72e571ccc818601"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/kitinerary/zipball/d2adb02b6d46b36571dc3c5127a8360ba2d5b418",
-                "reference": "d2adb02b6d46b36571dc3c5127a8360ba2d5b418",
+                "url": "https://api.github.com/repos/ChristophWurst/kitinerary/zipball/5e0f19c16af95821d85f4a8da72e571ccc818601",
+                "reference": "5e0f19c16af95821d85f4a8da72e571ccc818601",
                 "shasum": ""
             },
             "require": {
@@ -1593,24 +1593,28 @@
                 }
             ],
             "description": "KItinerary adapter",
-            "time": "2020-01-13T21:39:22+00:00"
+            "support": {
+                "issues": "https://github.com/ChristophWurst/kitinerary/issues",
+                "source": "https://github.com/ChristophWurst/kitinerary/tree/0.2.2"
+            },
+            "time": "2022-10-02T14:11:40+00:00"
         },
         {
             "name": "christophwurst/kitinerary-bin",
-            "version": "0.2.3",
+            "version": "0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/kitinerary-bin.git",
-                "reference": "eaafa040b404651cb4ab75a2d7a53c71b55d2395"
+                "reference": "1ecb0ec448e22a71a17b0a133b6dc9d32154a879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-bin/zipball/eaafa040b404651cb4ab75a2d7a53c71b55d2395",
-                "reference": "eaafa040b404651cb4ab75a2d7a53c71b55d2395",
+                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-bin/zipball/1ecb0ec448e22a71a17b0a133b6dc9d32154a879",
+                "reference": "1ecb0ec448e22a71a17b0a133b6dc9d32154a879",
                 "shasum": ""
             },
             "require": {
-                "christophwurst/kitinerary": "^0.2.1",
+                "christophwurst/kitinerary": "^0.2.2",
                 "ext-json": "*",
                 "php": "^7.1",
                 "psr/log": "^1.1"
@@ -1632,24 +1636,28 @@
                 }
             ],
             "description": "KItinerary binary executable",
-            "time": "2020-01-13T21:43:49+00:00"
+            "support": {
+                "issues": "https://github.com/ChristophWurst/kitinerary-bin/issues",
+                "source": "https://github.com/ChristophWurst/kitinerary-bin/tree/0.2.5"
+            },
+            "time": "2022-10-03T11:38:50+00:00"
         },
         {
             "name": "christophwurst/kitinerary-flatpak",
-            "version": "0.2.2",
+            "version": "0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/kitinerary-flatpak.git",
-                "reference": "2f0254f31a6b3d88f7a8ac5de25c580820401d37"
+                "reference": "8eca1209dbc009dd301431373598a108fc920aa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-flatpak/zipball/2f0254f31a6b3d88f7a8ac5de25c580820401d37",
-                "reference": "2f0254f31a6b3d88f7a8ac5de25c580820401d37",
+                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-flatpak/zipball/8eca1209dbc009dd301431373598a108fc920aa6",
+                "reference": "8eca1209dbc009dd301431373598a108fc920aa6",
                 "shasum": ""
             },
             "require": {
-                "christophwurst/kitinerary": "^0.2",
+                "christophwurst/kitinerary": "^0.2.2",
                 "ext-json": "*"
             },
             "type": "library",
@@ -1669,27 +1677,34 @@
                 }
             ],
             "description": "KItinerary Flatpak binding",
-            "time": "2020-01-13T21:42:51+00:00"
+            "support": {
+                "issues": "https://github.com/ChristophWurst/kitinerary-flatpak/issues",
+                "source": "https://github.com/ChristophWurst/kitinerary-flatpak/tree/0.2.3"
+            },
+            "time": "2022-10-03T11:35:21+00:00"
         },
         {
             "name": "christophwurst/kitinerary-sys",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/kitinerary-sys.git",
-                "reference": "db1c61703e94746b95543f14c5a09067faba6f92"
+                "reference": "ad4ca9ac0dcbbce8d3f90be2d8ef55c1c1777849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-sys/zipball/db1c61703e94746b95543f14c5a09067faba6f92",
-                "reference": "db1c61703e94746b95543f14c5a09067faba6f92",
+                "url": "https://api.github.com/repos/ChristophWurst/kitinerary-sys/zipball/ad4ca9ac0dcbbce8d3f90be2d8ef55c1c1777849",
+                "reference": "ad4ca9ac0dcbbce8d3f90be2d8ef55c1c1777849",
                 "shasum": ""
             },
             "require": {
-                "christophwurst/kitinerary": "^0.2.1",
+                "christophwurst/kitinerary": "^0.2.2",
                 "ext-json": "*",
                 "php": "^7.1",
                 "psr/log": "^1.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -1708,7 +1723,11 @@
                 }
             ],
             "description": "KItinerary binding for the system package",
-            "time": "2020-05-15T14:29:54+00:00"
+            "support": {
+                "issues": "https://github.com/ChristophWurst/kitinerary-sys/issues",
+                "source": "https://github.com/ChristophWurst/kitinerary-sys/tree/v0.1.1"
+            },
+            "time": "2022-10-03T11:36:57+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2157,6 +2176,9 @@
                 "psr",
                 "psr-3"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
+            },
             "time": "2021-05-03T11:20:27+00:00"
         },
         {
@@ -2478,16 +2500,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.26.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e"
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
                 "shasum": ""
             },
             "require": {
@@ -2502,7 +2524,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2541,7 +2563,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.27.0"
             },
             "funding": [
                 {
@@ -2557,20 +2579,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:49:31+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
-            "version": "v1.26.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php73.git",
-                "reference": "e440d35fa0286f77fb45b79a03fedbeda9307e85"
+                "reference": "9e8ecb5f92152187c4799efd3c96b78ccab18ff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/e440d35fa0286f77fb45b79a03fedbeda9307e85",
-                "reference": "e440d35fa0286f77fb45b79a03fedbeda9307e85",
+                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/9e8ecb5f92152187c4799efd3c96b78ccab18ff9",
+                "reference": "9e8ecb5f92152187c4799efd3c96b78ccab18ff9",
                 "shasum": ""
             },
             "require": {
@@ -2579,7 +2601,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2620,7 +2642,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php73/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-php73/tree/v1.27.0"
             },
             "funding": [
                 {
@@ -2636,20 +2658,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:49:31+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.26.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "cfa0ae98841b9e461207c13ab093d76b0fa7bace"
+                "reference": "7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/cfa0ae98841b9e461207c13ab093d76b0fa7bace",
-                "reference": "cfa0ae98841b9e461207c13ab093d76b0fa7bace",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936",
+                "reference": "7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936",
                 "shasum": ""
             },
             "require": {
@@ -2658,7 +2680,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2703,7 +2725,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.27.0"
             },
             "funding": [
                 {
@@ -2719,26 +2741,28 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T07:21:04+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "youthweb/urllinker",
-            "version": "1.4.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/youthweb/urllinker.git",
-                "reference": "093f392ef35fea4bd1d3b4ad931d5d3af9a4b5bc"
+                "reference": "0a664d4f0472c63013a43a7ca7ddbd0c58ce998a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/youthweb/urllinker/zipball/093f392ef35fea4bd1d3b4ad931d5d3af9a4b5bc",
-                "reference": "093f392ef35fea4bd1d3b4ad931d5d3af9a4b5bc",
+                "url": "https://api.github.com/repos/youthweb/urllinker/zipball/0a664d4f0472c63013a43a7ca7ddbd0c58ce998a",
+                "reference": "0a664d4f0472c63013a43a7ca7ddbd0c58ce998a",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "phpstan/phpstan": "^1.9",
                 "phpunit/phpunit": "^9"
             },
             "type": "library",
@@ -2766,33 +2790,36 @@
             "homepage": "https://github.com/youthweb",
             "support": {
                 "issues": "https://github.com/youthweb/urllinker/issues",
-                "source": "https://github.com/youthweb/urllinker/tree/1.4.0"
+                "source": "https://github.com/youthweb/urllinker/tree/1.5.1"
             },
-            "time": "2021-03-05T09:22:19+00:00"
+            "time": "2022-12-09T15:03:24+00:00"
         }
     ],
     "packages-dev": [
         {
-            "name": "christophwurst/nextcloud",
-            "version": "v21.0.0",
+            "name": "nextcloud/ocp",
+            "version": "dev-stable25",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "41e1476b4aed5bce7371895054049eca353729c5"
+                "url": "https://github.com/nextcloud-deps/ocp.git",
+                "reference": "8040e907ed5feab42013d68cf5143a33cc93dfc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/41e1476b4aed5bce7371895054049eca353729c5",
-                "reference": "41e1476b4aed5bce7371895054049eca353729c5",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/8040e907ed5feab42013d68cf5143a33cc93dfc5",
+                "reference": "8040e907ed5feab42013d68cf5143a33cc93dfc5",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.4 || ~8.0 || ~8.1",
+                "psr/container": "^1.1.1",
+                "psr/event-dispatcher": "^1.0",
+                "psr/log": "^1.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "21.0.0-dev"
+                    "dev-master": "26.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2806,20 +2833,24 @@
                 }
             ],
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
-            "time": "2021-03-01T08:42:25+00:00"
+            "support": {
+                "issues": "https://github.com/nextcloud-deps/ocp/issues",
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable25"
+            },
+            "time": "2022-12-12T00:39:14+00:00"
         },
         {
             "name": "psalm/phar",
-            "version": "4.29.0",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "367e803642395ef89d1edf8d472db28383bc0181"
+                "reference": "43a6cee76d19e9ddc2e39ef1f0ae7d12d351c85f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/367e803642395ef89d1edf8d472db28383bc0181",
-                "reference": "367e803642395ef89d1edf8d472db28383bc0181",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/43a6cee76d19e9ddc2e39ef1f0ae7d12d351c85f",
+                "reference": "43a6cee76d19e9ddc2e39ef1f0ae7d12d351c85f",
                 "shasum": ""
             },
             "require": {
@@ -2839,9 +2870,107 @@
             "description": "Composer-based Psalm Phar",
             "support": {
                 "issues": "https://github.com/psalm/phar/issues",
-                "source": "https://github.com/psalm/phar/tree/4.29.0"
+                "source": "https://github.com/psalm/phar/tree/5.1.0"
             },
-            "time": "2022-10-11T17:14:24+00:00"
+            "time": "2022-12-02T21:23:59+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/container/issues",
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
+            },
+            "time": "2021-11-05T16:50:12+00:00"
+        },
+        {
+            "name": "psr/event-dispatcher",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/event-dispatcher.git",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\EventDispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Standard interfaces for event handling.",
+            "keywords": [
+                "events",
+                "psr",
+                "psr-14"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/event-dispatcher/issues",
+                "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
+            },
+            "time": "2019-01-08T18:20:26+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -3210,6 +3339,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "nextcloud/ocp": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

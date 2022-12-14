@@ -389,8 +389,7 @@
 			</ButtonVue>
 		</template>
 	</EmptyContent>
-	<div v-else-if="state === STATES.WARNING" class="emptycontent" role="alert">
-		<h2>{{ t('mail', 'Warning sending your message') }}</h2>
+	<EmptyContent v-else-if="state === STATES.WARNING" :title="t('mail', 'Warning sending your message')" role="alert">
 		<p v-if="errorText">
 			{{ errorText }}
 		</p>
@@ -400,7 +399,7 @@
 		<ButtonVue type="tertiary" @click="onForceSend">
 			{{ t('mail', 'Send anyway') }}
 		</ButtonVue>
-	</div>
+	</EmptyContent>
 	<EmptyContent v-else :title="sendAtVal ? t('mail', 'Message will be sent at') + ' ' + convertToLocalDate(sendAtVal) : t('mail', 'Message sent!')">
 		<template #icon>
 			<IconCheck :size="20" />
@@ -887,7 +886,7 @@ export default {
 				body: this.encrypt ? plain(this.bodyVal) : html(this.bodyVal),
 				attachments: this.attachments,
 				inReplyToMessageId: this.inReplyToMessageId ?? (this.replyTo ? this.replyTo.messageId : undefined),
-				isHtml: !this.editorPlainText,
+				isHtml: !this.encrypt && !this.editorPlainText,
 				requestMdn: this.requestMdn,
 				sendAt: this.sendAtVal ? Math.floor(this.sendAtVal / 1000) : undefined,
 			}

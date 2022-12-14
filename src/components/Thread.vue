@@ -1,13 +1,18 @@
 <template>
 	<AppContentDetails id="mail-message">
-		<Loading v-if="loading" />
+		<!-- Show outer loading screen only if we have no data about the thread -->
+		<Loading v-if="loading && thread.length === 0" :hint="t('mail', 'Loading thread')" />
+		<Error
+			v-else-if="error"
+			:error="error && error.message ? error.message : t('mail', 'Not found')"
+			:message="errorMessage" />
 		<template v-else>
 			<div id="mail-thread-header">
 				<div id="mail-thread-header-fields">
 					<h2 :title="threadSubject">
 						{{ threadSubject }}
 					</h2>
-					<div ref="avatarHeader" class="avatar-header">
+					<div v-if="thread.length" ref="avatarHeader" class="avatar-header">
 						<!-- Participants that can fit in the parent div -->
 						<RecipientBubble v-for="participant in threadParticipants.slice(0, participantsToDisplay)"
 							:key="participant.email"
@@ -55,6 +60,7 @@ import debounce from 'lodash/fp/debounce'
 import { getRandomMessageErrorMessage } from '../util/ErrorMessageFactory'
 import Loading from './Loading'
 import logger from '../logger'
+import Error from './Error'
 import RecipientBubble from './RecipientBubble'
 import ThreadEnvelope from './ThreadEnvelope'
 
@@ -63,6 +69,7 @@ export default {
 	components: {
 		RecipientBubble,
 		AppContentDetails,
+		Error,
 		Loading,
 		ThreadEnvelope,
 		Popover,
@@ -188,6 +195,9 @@ export default {
 			}
 		},
 		toggleExpand(threadId) {
+			if (this.thread.length === 1) {
+				return
+			}
 			if (!this.expandedThreads.includes(threadId)) {
 				console.debug(`expand thread ${threadId}`)
 				this.expandedThreads.push(threadId)
@@ -211,8 +221,11 @@ export default {
 		},
 		async resetThread() {
 			this.expandedThreads = [this.threadId]
+			this.errorMessage = ''
+			this.error = undefined
 			await this.fetchThread()
 			this.updateParticipantsToDisplay()
+
 		},
 		async fetchThread() {
 			this.loading = true
@@ -243,10 +256,12 @@ export default {
 				this.loading = false
 			} catch (error) {
 				logger.error('could not load envelope thread', { threadId, error })
-				if (error.isError) {
-					this.errorMessage = t('mail', 'Could not load your message thread')
-					this.error = error
+				if (error?.response?.status === 403) {
+					this.error = t('mail', 'Could not load your message thread')
+					this.errorMessage = t('mail', 'The thread doesn\'t exist or has been deleted')
 					this.loading = false
+				} else {
+					this.errorMessage = t('mail', 'Could not load your message thread')
 				}
 			}
 		},
@@ -256,10 +271,7 @@ export default {
 
 <style lang="scss">
 #mail-message {
-	flex-grow: 1;
-	max-height: calc(100vh - 50px);
 	margin-bottom: 30vh;
-	overflow: auto;
 
 	.icon-loading {
 		&:only-child:after {
@@ -270,7 +282,7 @@ export default {
 
 .mail-message-body {
 	flex: 1;
-	margin-bottom: 60px;
+	margin-bottom: 30px;
 	position: relative;
 }
 

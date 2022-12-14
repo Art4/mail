@@ -37,6 +37,8 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Authentication\LoginCredentials\ICredentials;
+use OCP\Authentication\LoginCredentials\IStore as ICredentialStore;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -92,6 +94,9 @@ class PageControllerTest extends TestCase {
 	/** @var IEventDispatcher|MockObject */
 	private $eventDispatcher;
 
+	/** @var ICredentialStore|MockObject */
+	private $credentialStore;
+
 	/** @var PageController */
 	private $controller;
 
@@ -113,6 +118,7 @@ class PageControllerTest extends TestCase {
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->outboxService = $this->createMock(OutboxService::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->credentialStore = $this->createMock(ICredentialStore::class);
 
 		$this->controller = new PageController(
 			$this->appName,
@@ -130,6 +136,7 @@ class PageControllerTest extends TestCase {
 			$this->logger,
 			$this->outboxService,
 			$this->eventDispatcher,
+			$this->credentialStore,
 		);
 	}
 
@@ -217,14 +224,16 @@ class PageControllerTest extends TestCase {
 				['debug', false, true],
 				['app.mail.attachment-size-limit', 0, 123],
 			]);
-		$this->config->expects($this->exactly(3))
+		$this->config->expects($this->exactly(4))
 			->method('getAppValue')
 			->withConsecutive(
 				[ 'mail', 'installed_version' ],
+				['mail', 'google_oauth_client_id' ],
 				['core', 'backgroundjobs_mode', 'ajax' ],
 				['mail', 'allow_new_mail_accounts', 'yes']
 			)->willReturnOnConsecutiveCalls(
 				$this->returnValue('1.2.3'),
+				$this->returnValue(''),
 				$this->returnValue('cron'),
 				$this->returnValue('yes')
 			);
@@ -238,13 +247,23 @@ class PageControllerTest extends TestCase {
 			->with($this->equalTo('jane'), $this->equalTo('settings'),
 				$this->equalTo('email'), $this->equalTo(''))
 			->will($this->returnValue('jane@doe.cz'));
-		$this->initialState->expects($this->exactly(9))
+
+		$loginCredentials = $this->createMock(ICredentials::class);
+		$loginCredentials->expects($this->once())
+			->method('getPassword')
+			->willReturn(null);
+		$this->credentialStore->expects($this->once())
+			->method('getLoginCredentials')
+			->willReturn($loginCredentials);
+
+		$this->initialState->expects($this->exactly(10))
 			->method('provideInitialState')
 			->withConsecutive(
 				['debug', true],
 				['accounts', $accountsJson],
 				['account-settings', []],
 				['tags', []],
+				['password-is-unavailable', true],
 				['prefill_displayName', 'Jane Doe'],
 				['prefill_email', 'jane@doe.cz'],
 				['outbox-messages', []],
@@ -252,16 +271,15 @@ class PageControllerTest extends TestCase {
 				['allow-new-accounts', true]
 			);
 
-		$expected = new TemplateResponse($this->appName, 'index',
-			[
-				'attachment-size-limit' => 123,
-				'external-avatars' => 'true',
-				'reply-mode' => 'bottom',
-				'app-version' => '1.2.3',
-				'collect-data' => 'true',
-				'start-mailbox-id' => '123',
-				'tag-classified-messages' => 'true',
-			]);
+		$expected = new TemplateResponse($this->appName, 'index', [
+			'attachment-size-limit' => 123,
+			'external-avatars' => 'true',
+			'reply-mode' => 'bottom',
+			'app-version' => '1.2.3',
+			'collect-data' => 'true',
+			'start-mailbox-id' => '123',
+			'tag-classified-messages' => 'true',
+		]);
 		$csp = new ContentSecurityPolicy();
 		$csp->addAllowedFrameDomain('\'self\'');
 		$expected->setContentSecurityPolicy($csp);

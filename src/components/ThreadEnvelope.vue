@@ -22,9 +22,9 @@
   -->
 
 <template>
-	<div class="envelope">
-		<div class="envelope--header"
-			:class="{'list-item-style' : expanded }">
+	<div class="envelope"
+		:class="{'envelope--expanded' : expanded }">
+		<div class="envelope__header">
 			<Avatar v-if="envelope.from && envelope.from[0]"
 				:email="envelope.from[0].email"
 				:display-name="envelope.from[0].label"
@@ -62,7 +62,7 @@
 				</div>
 				<div v-if="showSubline" class="subline">
 					<span class="preview">
-						{{ envelope.previewText }}
+						{{ isEncrypted ? t('mail', 'Encrypted message') : envelope.previewText }}
 					</span>
 				</div>
 				<div v-for="tag in tags"
@@ -77,6 +77,20 @@
 			<div class="right">
 				<Moment class="timestamp" :timestamp="envelope.dateInt" />
 				<template v-if="expanded">
+					<NcActions v-if="sMimeData.isSigned">
+						<template #icon>
+							<LockIcon v-if="sMimeData.signatureIsValid"
+								:size="20"
+								fill-color="#ffcc00" />
+							<LockOffIcon v-else
+								:size="20"
+								fill-color="red" />
+						</template>
+						<NcActionText>
+							{{ sMimeSignMessage }}
+						</NcActionText>
+						<!-- TODO: display information about signer and/or CA certificate -->
+					</NcActions>
 					<ButtonVue
 						:class="{ primary: expanded}"
 						:title="hasMultipleRecipients ? t('mail', 'Reply all') : t('mail', 'Reply')"
@@ -143,14 +157,16 @@
 				</template>
 			</div>
 		</div>
-		<Loading v-if="loading" />
-		<Message v-else-if="message"
+		<MessageLoadingSkeleton v-if="loading !== LOADING_DONE" />
+		<Message v-if="message && loading !== LOADING_MESSAGE"
+			v-show="loading === LOADING_DONE"
 			:envelope="envelope"
 			:message="message"
-			:full-height="fullHeight" />
+			:full-height="fullHeight"
+			@load="loading = LOADING_DONE" />
 		<Error v-else-if="error"
 			:error="error && error.message ? error.message : t('mail', 'Not found')"
-			:message="errorMessage"
+			message=""
 			:data="error"
 			role="alert" />
 	</div>
@@ -162,7 +178,7 @@ import Error from './Error'
 import importantSvg from '../../img/important.svg'
 import IconFavorite from 'vue-material-design-icons/Star'
 import JunkIcon from './icons/JunkIcon'
-import Loading from './Loading'
+import MessageLoadingSkeleton from './MessageLoadingSkeleton'
 import logger from '../logger'
 import Message from './Message'
 import MenuEnvelope from './MenuEnvelope'
@@ -174,11 +190,21 @@ import DeleteIcon from 'vue-material-design-icons/Delete'
 import ArchiveIcon from 'vue-material-design-icons/PackageDown'
 import EmailUnread from 'vue-material-design-icons/Email'
 import EmailRead from 'vue-material-design-icons/EmailOpen'
+import LockIcon from 'vue-material-design-icons/Lock'
+import LockOffIcon from 'vue-material-design-icons/LockOff'
 import { buildRecipients as buildReplyRecipients } from '../ReplyBuilder'
 import { hiddenTags } from './tags.js'
 import { showError } from '@nextcloud/dialogs'
 import { matchError } from '../errors/match'
 import NoTrashMailboxConfiguredError from '../errors/NoTrashMailboxConfiguredError'
+import { isPgpText } from '../crypto/pgp'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions'
+import NcActionText from '@nextcloud/vue/dist/Components/NcActionText'
+
+// Ternary loading state
+const LOADING_DONE = 0
+const LOADING_MESSAGE = 1
+const LOADING_BODY = 2
 
 export default {
 	name: 'ThreadEnvelope',
@@ -188,7 +214,7 @@ export default {
 		Error,
 		IconFavorite,
 		JunkIcon,
-		Loading,
+		MessageLoadingSkeleton,
 		MenuEnvelope,
 		Moment,
 		Message,
@@ -199,6 +225,10 @@ export default {
 		EmailUnread,
 		DeleteIcon,
 		ArchiveIcon,
+		LockIcon,
+		LockOffIcon,
+		NcActions,
+		NcActionText,
 	},
 	props: {
 		envelope: {
@@ -231,11 +261,14 @@ export default {
 	},
 	data() {
 		return {
-			loading: false,
+			loading: LOADING_DONE,
 			error: undefined,
 			message: undefined,
 			importantSvg,
 			seenTimer: undefined,
+			LOADING_BODY,
+			LOADING_DONE,
+			LOADING_MESSAGE,
 		}
 	},
 	computed: {
@@ -262,6 +295,10 @@ export default {
 					threadId: this.envelope.databaseId,
 				},
 			}
+		},
+		isEncrypted() {
+			return this.envelope.previewText
+				&& isPgpText(this.envelope.previewText)
 		},
 		isImportant() {
 			return this.$store.getters
@@ -291,6 +328,19 @@ export default {
 		showImportantIconVariant() {
 			return this.envelope.flags.seen
 		},
+		/**
+		 * @return {{isSigned: (boolean|undefined), signatureIsValid: (boolean|undefined)}}
+		 */
+		sMimeData() {
+			return this.message?.sMime ?? {}
+		},
+		sMimeSignMessage() {
+			if (this.sMimeData.signatureIsValid) {
+				return t('mail', 'This message contains a verified digital S/MIME signature. The message wasn\'t changed since it was sent.')
+			} else {
+				return t('mail', 'This message contains an unverified digital S/MIME signature. The message might have been changed since it was sent or the certificate of the signer is untrusted.')
+			}
+		},
 	},
 	watch: {
 		expanded(expanded) {
@@ -298,6 +348,7 @@ export default {
 				this.fetchMessage()
 			} else {
 				this.message = undefined
+				this.loading = LOADING_DONE
 			}
 		},
 	},
@@ -318,7 +369,7 @@ export default {
 	},
 	methods: {
 		async fetchMessage() {
-			this.loading = true
+			this.loading = LOADING_MESSAGE
 
 			logger.debug(`fetching thread message ${this.envelope.databaseId}`)
 
@@ -334,7 +385,11 @@ export default {
 					}, 2000)
 				}
 
-				this.loading = false
+				if (this.message.hasHtmlBody) {
+					this.loading = LOADING_BODY
+				} else {
+					this.loading = LOADING_DONE
+				}
 			} catch (error) {
 				logger.error('Could not fetch message', { error })
 			}
@@ -475,14 +530,6 @@ export default {
 			}
 		}
 	}
-	.subline {
-		margin-left: 8px;
-		color: var(--color-text-maxcontrast);
-		cursor: default;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
 
 	.envelope {
 		display: flex;
@@ -493,6 +540,15 @@ export default {
 		margin-right: 10px;
 		background-color: var(--color-main-background);
 		padding-bottom: 28px;
+		animation: show 200ms 90ms cubic-bezier(.17, .67, .83, .67) forwards;
+		opacity: 0.5;
+		transform-origin: top center;
+		@keyframes show {
+			100% {
+				opacity: 1;
+				transform: none;
+			}
+		}
 
 		& + .envelope {
 			margin-top: -28px;
@@ -502,19 +558,37 @@ export default {
 			margin-bottom: 10px;
 			padding-bottom: 0;
 		}
-	}
 
-	.envelope--header {
-		position: relative;
-		display: flex;
-		align-items: center;
-		padding: 10px;
-		border-radius: var(--border-radius);
-		min-height: 68px; /* prevents jumping between open/collapsed */
+		&__header {
+			position: relative;
+			display: flex;
+			align-items: center;
+			padding: 10px;
+			border-radius: var(--border-radius);
+			min-height: 68px; /* prevents jumping between open/collapsed */
+		}
+
+		.subline {
+			margin-left: 8px;
+			color: var(--color-text-maxcontrast);
+			cursor: default;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		&--expanded {
+			min-height: 350px;
+		}
 	}
 	.left {
 		flex-grow: 1;
 		min-width: 0; /* https://css-tricks.com/flexbox-truncated-text/ */
+		display: inline-block;
+		position: relative;
+		z-index: 1;
+		padding: 2em;
+		margin: -2em;
 	}
 	.icon-important {
 		:deep(path) {
@@ -589,9 +663,6 @@ export default {
 		margin: 0 1px;
 		overflow: hidden;
 		left: 4px;
-	}
-	.envelope--header.list-item-style {
-		border-radius: 16px;
 	}
 	.junk-favorite-position-with-tag-subline {
 		margin-bottom: 14px !important;

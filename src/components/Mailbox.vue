@@ -20,28 +20,30 @@
   -->
 
 <template>
-	<Error v-if="error"
-		:error="t('mail', 'Could not open mailbox')"
-		message=""
-		role="alert" />
-	<LoadingSkeleton v-else-if="loadingEnvelopes" :number-of-lines="20" />
-	<Loading
-		v-else-if="loadingCacheInitialization"
-		:hint="t('mail', 'Loading messages …')"
-		:slow-hint="t('mail', 'Indexing your messages. This can take a bit longer for larger mailboxes.')" />
-	<EmptyMailboxSection v-else-if="isPriorityInbox && !hasMessages" key="empty" />
-	<EmptyMailbox v-else-if="!hasMessages" key="empty" />
-	<EnvelopeList
-		v-else
-		:account="account"
-		:mailbox="mailbox"
-		:search-query="searchQuery"
-		:envelopes="envelopesToShow"
-		:refreshing="refreshing"
-		:loading-more="loadingMore"
-		:load-more-button="showLoadMore"
-		@delete="onDelete"
-		@load-more="loadMore" />
+	<div>
+		<Error v-if="error"
+			:error="t('mail', 'Could not open mailbox')"
+			message=""
+			role="alert" />
+		<LoadingSkeleton v-else-if="loadingEnvelopes" :number-of-lines="20" />
+		<Loading
+			v-else-if="loadingCacheInitialization"
+			:hint="t('mail', 'Loading messages …')"
+			:slow-hint="t('mail', 'Indexing your messages. This can take a bit longer for larger mailboxes.')" />
+		<EmptyMailboxSection v-else-if="isPriorityInbox && !hasMessages" key="empty" />
+		<EmptyMailbox v-else-if="!hasMessages" key="empty" />
+		<EnvelopeList
+			v-else
+			:account="account"
+			:mailbox="mailbox"
+			:search-query="searchQuery"
+			:envelopes="envelopesToShow"
+			:refreshing="refreshing"
+			:loading-more="loadingMore"
+			:load-more-button="showLoadMore"
+			@delete="onDelete"
+			@load-more="loadMore" />
+	</div>
 </template>
 
 <script>
@@ -166,7 +168,7 @@ export default {
 		mailbox() {
 			this.loadEnvelopes()
 				.then(() => {
-					logger.debug(`syncing mailbox ${this.mailbox.databaseId} (${this.searchQuery}) after mailbox change`)
+					logger.debug(`syncing mailbox ${this.mailbox.databaseId} (${this.query}) after mailbox change`)
 					this.sync(false)
 				})
 		},
@@ -200,7 +202,7 @@ export default {
 			this.loadingCacheInitialization = true
 			this.error = false
 
-			logger.debug(`syncing mailbox ${this.mailbox.databaseId} (${this.searchQuery}) during cache initalization`)
+			logger.debug(`syncing mailbox ${this.mailbox.databaseId} (${this.query}) during cache initalization`)
 			this.sync(true)
 				.then(() => {
 					this.loadingCacheInitialization = false
@@ -256,7 +258,6 @@ export default {
 				await matchError(error, {
 					[MailboxLockedError.getName()]: async (error) => {
 						logger.info(`Mailbox ${this.mailbox.databaseId} (${this.searchQuery}) is locked`, { error })
-
 						await wait(15 * 1000)
 						// Keep trying
 						await this.loadEnvelopes()

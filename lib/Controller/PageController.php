@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace OCA\Mail\Controller;
 
+use OCA\Mail\AppInfo\Application;
 use OCA\Mail\Contracts\IMailManager;
 use OCA\Mail\Contracts\IUserPreferences;
 use OCA\Mail\Service\OutboxService;
@@ -39,6 +40,9 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Authentication\Exceptions\CredentialsUnavailableException;
+use OCP\Authentication\Exceptions\PasswordUnavailableException;
+use OCP\Authentication\LoginCredentials\IStore as ICredentialStore;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -47,6 +51,7 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use function class_exists;
+use function http_build_query;
 use function json_decode;
 
 class PageController extends Controller {
@@ -63,6 +68,7 @@ class PageController extends Controller {
 	private LoggerInterface $logger;
 	private OutboxService $outboxService;
 	private IEventDispatcher $dispatcher;
+	private ICredentialstore $credentialStore;
 
 	public function __construct(string $appName,
 								IRequest $request,
@@ -78,7 +84,8 @@ class PageController extends Controller {
 								IInitialState $initialStateService,
 								LoggerInterface $logger,
 								OutboxService $outboxService,
-								IEventDispatcher $dispatcher) {
+								IEventDispatcher $dispatcher,
+								ICredentialStore $credentialStore) {
 		parent::__construct($appName, $request);
 
 		$this->urlGenerator = $urlGenerator;
@@ -94,6 +101,7 @@ class PageController extends Controller {
 		$this->logger = $logger;
 		$this->outboxService = $outboxService;
 		$this->dispatcher = $dispatcher;
+		$this->credentialStore = $credentialStore;
 	}
 
 	/**
@@ -143,6 +151,17 @@ class PageController extends Controller {
 			$this->tagMapper->getAllTagsForUser($this->currentUserId)
 		);
 
+		try {
+			$password = $this->credentialStore->getLoginCredentials()->getPassword();
+			$passwordIsUnavailable = $password === null || $password === '';
+		} catch (CredentialsUnavailableException | PasswordUnavailableException $e) {
+			$passwordIsUnavailable = true;
+		}
+		$this->initialStateService->provideInitialState(
+			'password-is-unavailable',
+			$passwordIsUnavailable,
+		);
+
 		$user = $this->userSession->getUser();
 		$response = new TemplateResponse($this->appName, 'index',
 			[
@@ -167,6 +186,22 @@ class PageController extends Controller {
 			'outbox-messages',
 			$this->outboxService->getMessages($user->getUID())
 		);
+		$clientId = $this->config->getAppValue(Application::APP_ID, 'google_oauth_client_id');
+		if (!empty($clientId)) {
+			$this->initialStateService->provideInitialState(
+				'google-oauth-url',
+				'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+					'client_id' => $clientId,
+					'redirect_uri' => $this->urlGenerator->linkToRouteAbsolute('mail.googleIntegration.oauthRedirect'),
+					'response_type' => 'code',
+					'prompt' => 'consent',
+					'state' => '_accountId_', // Replaced by frontend
+					'scope' => 'https://mail.google.com/',
+					'access_type' => 'offline',
+					'login_hint' => '_email_', // Replaced by frontend
+				]),
+			);
+		}
 
 		// Disable scheduled send in frontend if ajax cron is used because it is unreliable
 		$cronMode = $this->config->getAppValue('core', 'backgroundjobs_mode', 'ajax');

@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OCA\Mail\Service;
 
 use DOMDocument;
+use DOMElement;
 use DOMNode;
 use Horde_Mime_Part;
 use Horde_Text_Filter;
@@ -46,14 +47,14 @@ class MimeMessage {
 	public function build(bool $isHtml, string $content, array $attachments): Horde_Mime_Part {
 		if ($isHtml) {
 			$doc = new DOMDocument();
-			$doc->loadHTML($content, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+			$doc->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
 
 			$images = $doc->getElementsByTagName('img');
 			$imageParts = [];
 
 			for ($i = 0; $i < $images->count(); $i++) {
 				$image = $images->item($i);
-				if ($image === null) {
+				if (!($image instanceof DOMElement)) {
 					continue;
 				}
 
@@ -84,7 +85,7 @@ class MimeMessage {
 				$image->setAttribute('src', 'cid:' . $cid);
 			}
 
-			$htmlContent = $doc->saveHTML();
+			$htmlContent = $doc->saveHTML($doc->documentElement);
 			$textContent = Horde_Text_Filter::filter($htmlContent, 'Html2text', ['callback' => [$this, 'htmlToTextCallback']]);
 
 			$alternativePart = new Horde_Mime_Part();
@@ -164,7 +165,7 @@ class MimeMessage {
 	 * @return string|null non-null, add this text to the output and skip further processing of the node.
 	 */
 	public function htmlToTextCallback(DOMDocument $doc, DOMNode $node) {
-		if ($node instanceof \DOMElement && strtolower($node->tagName) === 'p') {
+		if ($node instanceof DOMElement && strtolower($node->tagName) === 'p') {
 			return $node->textContent . "\n";
 		}
 

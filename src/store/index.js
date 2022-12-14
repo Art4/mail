@@ -41,6 +41,7 @@ export default new Store({
 		root: {
 			namespaced: false,
 			state: {
+				isExpiredSession: false,
 				preferences: {},
 				accounts: {
 					[UNIFIED_ACCOUNT_ID]: {
@@ -96,6 +97,7 @@ export default new Store({
 				tagList: [],
 				isScheduledSendingDisabled: false,
 				currentUserPrincipal: undefined,
+				googleOauthUrl: null,
 				sieveScript: {},
 				calendars: [],
 			},

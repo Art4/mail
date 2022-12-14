@@ -28,7 +28,6 @@ import '@nextcloud/dialogs/styles/toast.scss'
 import './directives/drag-and-drop/styles/drag-and-drop.scss'
 import VueShortKey from 'vue-shortkey'
 import vToolTip from 'v-tooltip'
-import VueClipboard from 'vue-clipboard2'
 
 import App from './App'
 import Nextcloud from './mixins/Nextcloud'
@@ -48,7 +47,6 @@ Vue.mixin(Nextcloud)
 
 Vue.use(VueShortKey, { prevent: ['input', 'div', 'textarea'] })
 Vue.use(vToolTip)
-Vue.use(VueClipboard)
 
 const getPreferenceFromPage = (key) => {
 	const elem = document.getElementById(key)
@@ -91,12 +89,17 @@ store.commit('savePreference', {
 	key: 'allow-new-accounts',
 	value: loadState('mail', 'allow-new-accounts', true),
 })
+store.commit('savePreference', {
+	key: 'password-is-unavailable',
+	value: loadState('mail', 'password-is-unavailable', false),
+})
 
 const accountSettings = loadState('mail', 'account-settings')
 const accounts = loadState('mail', 'accounts', [])
 const tags = loadState('mail', 'tags', [])
 const outboxMessages = loadState('mail', 'outbox-messages')
 const disableScheduledSend = loadState('mail', 'disable-scheduled-send')
+const googleOauthUrl = loadState('mail', 'google-oauth-url', null)
 
 accounts.map(fixAccountId).forEach((account) => {
 	const settings = accountSettings.find(settings => settings.accountId === account.id)
@@ -118,6 +121,7 @@ tags.forEach(tag => store.commit('addTag', { tag }))
 outboxMessages.forEach(message => store.commit('outbox/addMessage', { message }))
 
 store.commit('setScheduledSendingDisabled', disableScheduledSend)
+store.commit('setGoogleOauthUrl', googleOauthUrl)
 
 export default new Vue({
 	el: '#content',

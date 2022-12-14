@@ -6,6 +6,7 @@
 			:disabled="$store.getters.showMessageComposer"
 			button-id="mail_new_message"
 			role="complementary"
+			:wide="true"
 			@click="onNewMessage">
 			<template #icon>
 				<IconAdd
@@ -85,10 +86,10 @@ export default {
 .header {
 	display: flex;
 	align-items: center;
-	padding: 8px 8px 8px 48px;
+	justify-content: space-between;
+	padding: calc(var(--default-grid-baseline, 4px) * 2);
 	gap: 4px;
 	height: 61px;
-	border-right: 1px solid var(--color-border)
 }
 .refresh__button {
 	background-color: transparent;

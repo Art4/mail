@@ -2,7 +2,9 @@
 	<AppContent pane-config-key="mail" :show-details="isThreadShown" @update:showDetails="hideMessage">
 		<div slot="list"
 			:class="{ header__button: !showThread || !isMobile }">
-			<NewMessageButtonHeader v-if="!showThread || !isMobile" />
+			<SearchMessages v-if="!showThread || !isMobile"
+				:mailbox="mailbox"
+				@search-changed="onUpdateSearchQuery" />
 			<AppContentList
 				v-infinite-scroll="onScroll"
 				v-shortkey.once="shortkeys"
@@ -22,7 +24,7 @@
 					:bus="bus"
 					:open-first="mailbox.specialRole !== 'drafts'" />
 				<template v-else>
-					<div class="app-content-list-item">
+					<div v-show="hasImportantEnvelopes" class="app-content-list-item">
 						<SectionTitle class="important" :name="t('mail', 'Important')" />
 						<Popover trigger="hover focus">
 							<ButtonVue slot="trigger"
@@ -38,7 +40,7 @@
 							</p>
 						</Popover>
 					</div>
-					<Mailbox
+					<Mailbox v-show="hasImportantEnvelopes"
 						class="nameimportant"
 						:account="unifiedAccount"
 						:mailbox="unifiedInbox"
@@ -48,7 +50,9 @@
 						:initial-page-size="8"
 						:collapsible="true"
 						:bus="bus" />
-					<SectionTitle class="app-content-list-item other" :name="t('mail', 'Other')" />
+					<SectionTitle v-show="hasImportantEnvelopes"
+						class="app-content-list-item other"
+						:name="t('mail', 'Other')" />
 					<Mailbox
 						class="nameother"
 						:account="unifiedAccount"
@@ -70,13 +74,13 @@ import { NcAppContent as AppContent, NcAppContentList as AppContentList, NcButto
 
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import SectionTitle from './SectionTitle'
-import NewMessageButtonHeader from './NewMessageButtonHeader'
 import Vue from 'vue'
 
 import infiniteScroll from '../directives/infinite-scroll'
 import IconInfo from 'vue-material-design-icons/Information'
 import logger from '../logger'
 import Mailbox from './Mailbox'
+import SearchMessages from './SearchMessages'
 import NoMessageSelected from './NoMessageSelected'
 import Thread from './Thread'
 import { UNIFIED_ACCOUNT_ID, UNIFIED_INBOX_ID } from '../store/constants'
@@ -101,8 +105,8 @@ export default {
 		Mailbox,
 		NoMessageSelected,
 		Popover,
-		NewMessageButtonHeader,
 		SectionTitle,
+		SearchMessages,
 		Thread,
 	},
 	mixins: [isMobile],
@@ -145,6 +149,9 @@ export default {
 		},
 		hasEnvelopes() {
 			return this.$store.getters.getEnvelopes(this.mailbox.databaseId, this.searchQuery).length > 0
+		},
+		hasImportantEnvelopes() {
+			return this.$store.getters.getEnvelopes(this.unifiedInbox.databaseId, this.appendToSearch(priorityImportantQuery)).length > 0
 		},
 		showThread() {
 			return (this.mailbox.isPriorityInbox === true || this.hasEnvelopes) && this.$route.name === 'message'
@@ -257,6 +264,9 @@ export default {
 				},
 			]
 		},
+		onUpdateSearchQuery(query) {
+			this.searchQuery = query
+		},
 	},
 }
 </script>
@@ -279,6 +289,9 @@ export default {
 .app-content-list-item:hover {
 	background: transparent;
 }
+.app-content-list-item {
+	flex: 0;
+}
 
 .button {
 	background-color: var(--color-main-background);
@@ -290,12 +303,13 @@ export default {
 		background-color: var(--color-background-dark);
 	}
 }
-
-#app-content-wrapper {
-	display: flex;
-}
 :deep(.button-vue--vue-secondary) {
-	box-shadow: none;
+	position: sticky;
+	top:40px;
+	left: 10px;
+}
+:deep(.app-content-wrapper) {
+	overflow: auto;
 }
 .envelope-list {
 	overflow-y: auto;

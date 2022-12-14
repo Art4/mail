@@ -20,7 +20,7 @@
   -->
 
 <template>
-	<Popover trigger="click" class="contact-popover">
+	<Popover ref="popover" trigger="click" class="contact-popover">
 		<UserBubble slot="trigger"
 			:display-name="label"
 			:avatar-image="avatarUrlAbsolute"
@@ -121,6 +121,7 @@ import { fetchAvatarUrlMemoized } from '../service/AvatarService'
 import { addToContact, findMatches, newContact, autoCompleteByName } from '../service/ContactIntegrationService'
 import uniqBy from 'lodash/fp/uniqBy'
 import debouncePromise from 'debounce-promise'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 
 const debouncedSearch = debouncePromise(autoCompleteByName, 500)
 
@@ -203,8 +204,13 @@ export default {
 		this.newContactName = this.label
 	},
 	methods: {
-		onClickCopyToClipboard() {
-			this.$copyText(this.email)
+		async onClickCopyToClipboard() {
+			try {
+				await navigator.clipboard.writeText(this.email)
+				showSuccess(t('mail', 'Copied email address to clipboard'))
+			} catch (e) {
+				showError(t('mail', 'Could not copy email address to clipboard'))
+			}
 		},
 		onClickReply() {
 			this.$router.push({

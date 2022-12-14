@@ -1,5 +1,5 @@
 <template>
-	<div id="mail-content">
+	<div class="html-message-body">
 		<MdnRequest :message="message" />
 		<div v-if="hasBlockedContent" id="mail-message-has-blocked-content" style="color: #000000">
 			{{ t('mail', 'The images have been blocked to protect your privacy.') }}
@@ -27,8 +27,7 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<IconLoading v-if="loading" />
-		<div id="message-container" :class="{hidden: loading, scroll: !fullHeight}">
+		<div id="message-container" :class="{scroll: !fullHeight}">
 			<iframe ref="iframe"
 				class="message-frame"
 				:title="t('mail', 'Message frame')"
@@ -43,7 +42,7 @@
 import { iframeResizer } from 'iframe-resizer'
 import PrintScout from 'printscout'
 import { trustSender } from '../service/TrustedSenderService'
-import { NcActionButton as ActionButton, NcActions as Actions, NcLoadingIcon as IconLoading } from '@nextcloud/vue'
+import { NcActionButton as ActionButton, NcActions as Actions } from '@nextcloud/vue'
 import IconImage from 'vue-material-design-icons/ImageSizeSelectActual'
 import IconMail from 'vue-material-design-icons/Email'
 import IconDomain from 'vue-material-design-icons/Domain'
@@ -61,7 +60,6 @@ export default {
 		IconImage,
 		IconMail,
 		IconDomain,
-		IconLoading,
 	},
 	props: {
 		url: {
@@ -80,7 +78,6 @@ export default {
 	},
 	data() {
 		return {
-			loading: true,
 			hasBlockedContent: false,
 			isSenderTrusted: this.message.isSenderTrusted,
 		}
@@ -115,7 +112,7 @@ export default {
 				|| iframeDoc.querySelectorAll('[data-original-style]').length > 0
 				|| iframeDoc.querySelectorAll('style[data-original-content]').length > 0
 
-			this.loading = false
+			this.$emit('load')
 			if (this.isSenderTrusted) {
 				this.displayIframe()
 			}
@@ -155,7 +152,7 @@ export default {
 
 <style lang="scss" scoped>
 // account for 8px margin on iframe body
-#mail-content {
+.html-message-body {
 	margin-left: 50px;
 	margin-top: 2px;
 	display: flex;
