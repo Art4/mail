@@ -33,6 +33,7 @@
 			<div
 				v-if="isImportant"
 				class="app-content-list-item-star icon-important"
+				:class="{ 'important-position-not-expanded' : importantPositionWithSubjectNotExpanded }"
 				:data-starred="isImportant ? 'true' : 'false'"
 				@click.prevent="onToggleImportant"
 				v-html="importantSvg" />
@@ -312,6 +313,9 @@ export default {
 		},
 		junkFavoritePositionWithTagSubline() {
 			return !this.showSubline && this.tags.length > 0
+		},
+		importantPositionWithSubjectNotExpanded() {
+			return !this.expanded && this.hasChangedSubject
 		},
 		showFavoriteIconVariant() {
 			return this.envelope.flags.flagged
@@ -647,5 +651,9 @@ export default {
 	}
 	.junk-favorite-position {
 		margin-bottom: 36px !important;
+	}
+	.important-position-not-expanded {
+		margin-top: 10px;
+
 	}
 </style>
