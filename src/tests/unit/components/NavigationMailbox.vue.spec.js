@@ -253,4 +253,90 @@ describe('NavigationMailbox', () => {
 
 		expect(view.vm.hasSeenAcl).toBe(true)
 	})
+	it('allows toggling submailbox action without ACLs', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: undefined,
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasSubmailboxActionAcl).toBe(true)
+	})
+	it('disallows toggling submailbox action without k ACL right', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: 'x',
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasSubmailboxActionAcl).toBe(false)
+	})
+	it('allows toggling submailbox action with k ACL right', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: 'k',
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasSubmailboxActionAcl).toBe(true)
+	})
+
+
+	it('allows toggling delete action without ACLs', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: undefined,
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasDeleteAcl).toBe(true)
+	})
+	it('disallows toggling delete action without x ACL right', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: 's',
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasDeleteAcl).toBe(false)
+	})
+	it('allows toggling delete action with x ACL right', () => {
+		const view = shallowMount(NavigationMailbox, {
+			propsData: {
+				account: {},
+				mailbox: {
+					myAcls: 'x',
+				},
+			},
+			store,
+			localVue,
+		})
+
+		expect(view.vm.hasDeleteAcl).toBe(true)
+	})
 })
