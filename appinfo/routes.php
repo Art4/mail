@@ -369,6 +369,16 @@ return [
 			'url' => '/integration/google-auth',
 			'verb' => 'GET',
 		],
+		[
+			'name' => 'sMimeCertificate#index',
+			'url' => '/api/smime',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'sMimeCertificate#import',
+			'url' => '/api/smime/import',
+			'verb' => 'POST',
+		],
 	],
 	'resources' => [
 		'accounts' => ['url' => '/api/accounts'],
