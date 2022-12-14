@@ -146,7 +146,7 @@ export default {
 		passwordIsUnavailable() {
 			return this.$store.getters.getPreference('password-is-unavailable', false)
 		},
-		messages() {
+		outboxMessages() {
 			return this.$store.getters['outbox/getAllMessages']
 		},
 	},
